@@ -36,4 +36,4 @@ jobs:
 
       - name: Build project
         run: |
-          xcodebuild -workspace SignIn/SignIn.xcodeproj/project.pbxproj -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
+          xcodebuild -workspace __MACOSX/SignIn/._SignIn.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
