@@ -38,10 +38,10 @@ jobs:
         run: cp "__MACOSX/SignIn/._SignIn.xcworkspace" "SignIn/"
 
       - name: Build application
-        run: xcodebuild -workspace __MACOSX/SignIn/._SignIn.xcodeproj/._project.xcworkspace -scheme SignIn -configuration Release clean build
+        run: xcodebuild -workspace __MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace -scheme SignIn -configuration Release clean build
       
       - name: Archive application
-        run: xcodebuild -workspace __MACOSX/SignIn/._SignIn.xcodeproj/._project.xcworkspace -scheme SignIn -configuration Release -archivePath ./build/SignIn.xcarchive archive
+        run: xcodebuild -workspace __MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace -scheme SignIn -configuration Release -archivePath ./build/SignIn.xcarchive archive
       
       - name: Export application
         run: xcodebuild -exportArchive -archivePath ./build/SignIn.xcarchive -exportPath ./build/ -exportOptionsPlist ExportOptions.plist
