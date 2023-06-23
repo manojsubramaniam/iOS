@@ -34,12 +34,7 @@ jobs:
       - name: Clean derived data
         run: rm -rf ~/Library/Developer/Xcode/DerivedData
 
-   #   - name: Build project
-     #   run: |
-   #       xcodebuild -workspace __MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
-
-
       - name: Build project
         run: |
-          xcodebuild -workspace __MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
+          xcodebuild -workspace /__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
        
