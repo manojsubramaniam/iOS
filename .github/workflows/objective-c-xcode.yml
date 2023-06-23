@@ -34,6 +34,9 @@ jobs:
       - name: Clean derived data
         run: rm -rf ~/Library/Developer/Xcode/DerivedData
 
-      - name: Build project
-        run: |
-          xcodebuild -workspace __MACOSX/SignIn/._SignIn.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
+
+      - name: Run unit tests
+        run: xcodebuild test -scheme SignIn -project __MACOSX/SignIn/._SignIn.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 12,OS=$' | xcpretty && exit ${PIPESTATUS[0]}
+      #- name: Build project
+      #  run: |
+      #    xcodebuild -workspace __MACOSX/SignIn/._SignIn.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
