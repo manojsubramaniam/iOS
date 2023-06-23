@@ -1,41 +1,23 @@
-name: iOS starter workflow
+name: Build iOS Project
 
 on:
   push:
-    branches: main
-  pull_request:
-    branches: main
+    branches:
+      - main
 
 jobs:
   build:
-    name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
-
+    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      
-      - name: Copy Podfile
-        run: cp -r SignIn/Podfile .
-        
-      - name: Install CocoaPods
-        run: |
-          sudo gem install cocoapods
-          pod setup
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: pod install --project-directory=SignIn/
-      
-      - name: Check current directory
-        run: |
-          pwd
-          ls -al
-      
-      - name: Clean derived data
-        run: rm -rf ~/Library/Developer/Xcode/DerivedData
+    - name: Set up Xcode
+      uses: actions/setup-xcode@v2
+      with:
+        xcode-version: 14.2
 
-      - name: Build iOS App
-        run: xcodebuild -workspace __MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
-      
-      - name: Run Tests
-        run: xcodebuild -scheme Form4868 -workspace Form4868/Form4868.xcodeproj/xcuserdata/._project.xcworkspace test
+    - name: Build project
+      run: |
+        xcodebuild -workspace SignIn.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
