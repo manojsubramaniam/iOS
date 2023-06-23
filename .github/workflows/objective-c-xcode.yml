@@ -34,9 +34,12 @@ jobs:
       - name: Clean derived data
         run: rm -rf ~/Library/Developer/Xcode/DerivedData
 
+      - name: Copy project.xcworkspace
+        run: cp "__MACOSX/SignIn/._SignIn.xcworkspace" "SignIn/"
+
       - name: Build application
-        run: xcodebuild -workspace __MACOSX/SignIn/._SignIn.xcworkspace -scheme SignIn -configuration Release clean build
-     
+        run: xcodebuild -workspace SignIn/._SignIn.xcworkspace -scheme SignIn -configuration Release clean build
+      
       - name: Archive application
         run: xcodebuild -workspace __MACOSX/SignIn/._SignIn.xcworkspace -scheme SignIn -configuration Release -archivePath ./build/SignIn.xcarchive archive
       
