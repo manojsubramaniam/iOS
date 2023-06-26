@@ -24,6 +24,7 @@ jobs:
      
       - name: Install CocoaPods
         run: |
+          pod repo remove master
           pod setup
       
       - name: Install dependencies
