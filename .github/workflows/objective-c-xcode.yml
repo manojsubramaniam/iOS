@@ -21,6 +21,7 @@ jobs:
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
+          pod repo list
      
       - name: Install CocoaPods
         run: |
