@@ -32,7 +32,7 @@ jobs:
           ls -al 
      
       - name: Build application
-        run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace" -scheme SignIn -configuration Release clean build
+        run: xcodebuild -workspace ._project.xcworkspace -scheme SignIn -configuration Release clean build
       
       - name: Archive application
         run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace" -scheme SignIn -configuration Release -archivePath ./build/SignIn.xcarchive archive
