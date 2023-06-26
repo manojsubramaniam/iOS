@@ -29,36 +29,14 @@ jobs:
       - name: Check current directory
         run: |
           pwd
-          ls -al
-      
-      - name: Clean derived data
-        run: rm -rf ~/Library/Developer/Xcode/DerivedData
-        
- #     - name: Remove master pod repository
- #       run: pod repo remove master
+          ls -al 
      
-#- name: Remove specific pod repository
- #       run: pod repo remove my-repo
-      
- #     - name: Run pod setup
-#        run: pod setup
-
-      - name: Copy project.xcworkspace
-        run: cp "__MACOSX/SignIn/._SignIn.xcworkspace" "SignIn/"
-
- #     - name: Build application
- #       run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace -scheme SignIn -configuration Release clean build
+      - name: Build application
+        run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace" -scheme SignIn -configuration Release clean build
       
       - name: Archive application
-        run: xcodebuild -workspace "SignIn/._SignIn.xcworkspace" -scheme SignIn -configuration Release -archivePath ./build/SignIn.xcarchive archive
+        run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace" -scheme SignIn -configuration Release -archivePath ./build/SignIn.xcarchive archive
       
-   #   - name: Export application
-     #   run: xcodebuild -exportArchive -archivePath ./build/SignIn.xcarchive -exportPath ./build/ -exportOptionsPlist ExportOptions.plist
+      - name: Export application
+        run: xcodebuild -exportArchive -archivePath ./build/SignIn.xcarchive -exportPath ./build/ -exportOptionsPlist ExportOptions.plist
   
-
-
- #   - name: Run unit tests
- #       run: xcodebuild test -scheme SignIn -project __MACOSX/SignIn/._SignIn.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 12,OS=$' | xcpretty && exit ${PIPESTATUS[0]}
-      #- name: Build project
-      #  run: |
-      #    xcodebuild -workspace __MACOSX/SignIn/._SignIn.xcworkspace -scheme SignIn clean archive -configuration release -sdk iphoneos -archivePath SignIn.xcarchive
