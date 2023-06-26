@@ -32,7 +32,7 @@ jobs:
           ls -al 
      
       - name: Build application
-        run: xcodebuild -workspace "SignIn.xcworkspace/" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
+        run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
      
 #      - name: Build application
  #       run: xcodebuild -workspace "SignIn.xcworkspace" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
