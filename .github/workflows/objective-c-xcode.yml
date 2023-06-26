@@ -31,11 +31,11 @@ jobs:
           pwd
           ls -al 
      
-      #- name: Build application
-      #  run: xcodebuild -workspace "SignIn/SignIn.xcodeproj/project.xcworkspace/" -scheme SignIn -configuration Release clean build
-     
       - name: Build application
-        run: xcodebuild -workspace "SignIn.xcworkspace" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
+        run: xcodebuild -workspace "SignIn/SignIn.xcodeproj/project.xcworkspace/" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
+     
+#      - name: Build application
+ #       run: xcodebuild -workspace "SignIn.xcworkspace" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
 
       - name: Archive application
         run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace" -scheme SignIn -configuration Release -archivePath ./build/SignIn.xcarchive archive
