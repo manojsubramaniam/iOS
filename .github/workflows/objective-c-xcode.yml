@@ -34,14 +34,14 @@ jobs:
       - name: Clean derived data
         run: rm -rf ~/Library/Developer/Xcode/DerivedData
         
-      - name: Remove master pod repository
-        run: pod repo remove master
+ #     - name: Remove master pod repository
+ #       run: pod repo remove master
      
-      - name: Remove specific pod repository
-        run: pod repo remove my-repo
+#- name: Remove specific pod repository
+ #       run: pod repo remove my-repo
       
-      - name: Run pod setup
-        run: pod setup
+ #     - name: Run pod setup
+#        run: pod setup
 
       - name: Copy project.xcworkspace
         run: cp "__MACOSX/SignIn/._SignIn.xcworkspace" "SignIn/"
