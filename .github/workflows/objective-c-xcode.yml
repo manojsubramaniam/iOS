@@ -21,8 +21,11 @@ jobs:
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
+     
+      - name: Install CocoaPods
+        run: |
           sudo pod setup
-
+      
       - name: Install dependencies
         run: pod install --project-directory=SignIn/
       
