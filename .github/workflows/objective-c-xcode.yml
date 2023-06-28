@@ -35,6 +35,11 @@ jobs:
           pwd
           ls -al 
      
+      - name: Navigate to SignIn folder
+        run: |
+          cd SignIn/
+          ls
+        
  #     - name: Archive application
  #       run: xcodebuild -scheme "SignIn" -archivePath $RUNNER_TEMP/SignIn.xcarchive -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' clean archive
       
