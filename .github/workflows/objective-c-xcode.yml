@@ -60,7 +60,16 @@ jobs:
         
  #     - name: Archive application
  #       run: xcodebuild -scheme "SignIn" -archivePath $RUNNER_TEMP/SignIn.xcarchive -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' clean archive
-      
+      - name: Archive application
+        run: |
+          xcodebuild -workspace SignIn/SignIn.xcworkspace \
+          -scheme SignIn \
+          -archivePath $RUNNER_TEMP/SignIn.xcarchive \
+          -sdk iphoneos \
+          -configuration Debug \
+          -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' \
+          clean archive
+
       - name: Archive application
         run: xcodebuild -workspace __MACOSX/SignIn/SignIn.xcworkspace -scheme SignIn -archivePath $RUNNER_TEMP/SignIn.xcarchive -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' clean archive
 
