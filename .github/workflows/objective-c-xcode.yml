@@ -65,8 +65,8 @@ jobs:
         run: xcodebuild -workspace __MACOSX/SignIn/SignIn.xcworkspace -scheme SignIn -archivePath $RUNNER_TEMP/SignIn.xcarchive -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' clean archive
 
       - name: Build application
-        run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcworkspace" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
-     
+        run: xcodebuild -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath $RUNNER_TEMP/SignIn.xcarchive -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' clean archive
+                
 #      - name: Build application
  #       run: xcodebuild -workspace "SignIn.xcworkspace" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
 
