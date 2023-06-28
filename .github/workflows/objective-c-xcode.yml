@@ -58,9 +58,36 @@ jobs:
           cd SignIn/
           ls
         
- #     - name: Archive application
- #       run: xcodebuild -scheme "SignIn" -archivePath $RUNNER_TEMP/SignIn.xcarchive -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' clean archive
-     
+      - name: Modify Xcode project
+        run: |
+          gem install xcodeproj
+          ruby - <<EOF
+          require 'xcodeproj'
+
+          # Define the path to your Xcode project
+          project_path = 'SignIn'
+
+          # Define the target name
+          target_name = 'SignIn'
+
+          # Define the provisioning profile specifier
+          provisioning_profile_specifier = 'YourProvisioningProfileSpecifier'
+
+          # Open the Xcode project
+          project = Xcodeproj::Project.open(project_path)
+
+          # Find the target
+          target = project.targets.find { |t| t.name == target_name }
+
+          # Update the provisioning profile settings
+          target.build_configuration_list.build_configurations.each do |configuration|
+            configuration.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = provisioning_profile_specifier
+          end
+
+          # Save the changes to the Xcode project file
+          project.save
+          EOF
+
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
@@ -74,20 +101,3 @@ jobs:
           PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
           -allowProvisioningUpdates
 
-         
-
- #     - name: Archive application
- #       run: xcodebuild -workspace __MACOSX/SignIn/SignIn.xcworkspace -scheme SignIn -archivePath $RUNNER_TEMP/SignIn.xcarchive -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' clean archive
-
- #     - name: Build application
-#        run: xcodebuild -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath $RUNNER_TEMP/SignIn.xcarchive -sdk iphoneos -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0' clean archive
-                
-#      - name: Build application
- #       run: xcodebuild -workspace "SignIn.xcworkspace" -scheme SignIn -configuration Release clean build -allowProvisioningUpdates
-
-  #    - name: Archive application
-  #      run: xcodebuild -workspace "__MACOSX/SignIn/SignIn.xcodeproj/._project.xcworkspace" -scheme SignIn -configuration Release -archivePath ./build/SignIn.xcarchive archive
-      
- #     - name: Export application
- #       run: xcodebuild -exportArchive -archivePath ./build/SignIn.xcarchive -exportPath ./build/ -exportOptionsPlist ExportOptions.plist
-  
