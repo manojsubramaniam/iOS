@@ -11,7 +11,12 @@ jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
-
+  
+    inputs:
+        provisioning_profile_specifier:
+          description: 'Provisioning Profile Specifier'
+          required: true
+  
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -54,7 +59,7 @@ jobs:
           target_name = 'SignIn'
 
           # Define the provisioning profile specifier
-          provisioning_profile_specifier = 'YourProvisioningProfileSpecifier'
+      #    provisioning_profile_specifier = 'YourProvisioningProfileSpecifier'
 
           # Open the Xcode project
           project = Xcodeproj::Project.open(project_path)
@@ -70,11 +75,10 @@ jobs:
           # Save the changes to the Xcode project file
           project.save
           EOF
-
-          xcode_project_path="SignIn/SignIn.xcodeproj" # Replace with your Xcode project path
-          target_name="SignIn" # Replace with your target name
-          xcodebuild -project "$xcode_project_path" -target "$target_name" -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project "$xcode_project_path" -target "$target_name" -setBuildSetting "PROVISIONING_PROFILE_SPECIFIER"=""
+          xcodebuild -project SignIn/SignIn.xcodeproj -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project SignIn/SignIn.xcodeproj -setBuildSetting "PROVISIONING_PROFILE_SPECIFIER"="${{ inputs.provisioning_profile_specifier }}"
 
       - name: Build iOS App
-        run: xcodebuild -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath "$"
+        run: xcodebuild -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath "build/SignIn.xcarchive" build archive
 
+      - name: Package iOS App
+        run: xcodebuild -exportArchive -archivePath "build/SignIn.xcarchive" -exportOptionsPlist "SignIn/exportOptions.plist" -exportPath "build"
