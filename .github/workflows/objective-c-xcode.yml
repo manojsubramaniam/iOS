@@ -11,12 +11,7 @@ jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
-  
-    inputs:
-        provisioning_profile_specifier:
-          description: 'Provisioning Profile Specifier'
-          required: true
-  
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
