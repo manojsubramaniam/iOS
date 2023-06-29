@@ -71,45 +71,10 @@ jobs:
           project.save
           EOF
 
-   #   - name: Archive application
-    #    run: |
-     #     xcodebuild -workspace SignIn/SignIn.xcworkspace \
-      #    -scheme SignIn \
-       #   -archivePath $
-      
-      - name: Build and Archive
-        run: |
-          xcodebuild -workspace SignIn/SignIn.xcworkspace \
-            -scheme SignIn \
-            -archivePath "$"
-          xcodebuild -exportArchive \
-            -archivePath "$" \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath "BuildOutput"
+          xcode_project_path="SignIn/SignIn.xcodeproj" # Replace with your Xcode project path
+          target_name="SignIn" # Replace with your target name
+          xcodebuild -project "$xcode_project_path" -target "$target_name" -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project "$xcode_project_path" -target "$target_name" -setBuildSetting "PROVISIONING_PROFILE_SPECIFIER"=""
 
-      - name: Sign and Package
-        run: |
-          security create-keychain -p mysecretpassword build.keychain
-          security import ./Certificates/apple.cer -k ~/Library/Keychains/build.keychain -T /usr/bin/codesign
-          security import ./Certificates/dist.cer -k ~/Library/Keychains/build.keychain -T /usr/bin/codesign
-          security import ./Certificates/dist.p12 -k ~/Library/Keychains/build.keychain -P myp12password -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k mysecretpassword build.keychain
-          security list-keychains -s ~/Library/Keychains/build.keychain
-          security default-keychain -s ~/Library/Keychains/build.keychain
-          xcodebuild -exportArchive \
-            -archivePath "BuildOutput/SignIn.xcarchive" \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath "BuildOutput"
-
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: App Archive
-          path: BuildOutput/SignIn.xcarchive
-
-      - name: IPA artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: IPA File
-          path: BuildOutput/SignIn.ipa
+      - name: Build iOS App
+        run: xcodebuild -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath "$"
 
