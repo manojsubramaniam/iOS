@@ -11,7 +11,7 @@ jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
-
+  
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -41,39 +41,18 @@ jobs:
       - name: Install dependencies
         run: pod install --project-directory=SignIn/
 
+      - name: Set Provisioning Profile Specifier
+        id: input
+        run: |
+          echo "::set-output name=provisioning_profile_specifier::$(read -p 'Enter the Provisioning Profile Specifier: ' profileSpecifier && echo $profileSpecifier)"
+
       - name: Update provisioning profile specifier in Xcode project
         run: |
-          gem install xcodeproj
-          ruby - <<EOF
-          require 'xcodeproj'
-
-          # Define the path to your Xcode project
-          project_path = 'SignIn/SignIn.xcodeproj'
-
-          # Define the target name
-          target_name = 'SignIn'
-
-          # Define the provisioning profile specifier
-      #    provisioning_profile_specifier = 'YourProvisioningProfileSpecifier'
-
-          # Open the Xcode project
-          project = Xcodeproj::Project.open(project_path)
-
-          # Find the target
-          target = project.targets.find { |t| t.name == target_name }
-
-          # Update the provisioning profile settings
-          target.build_configuration_list.build_configurations.each do |configuration|
-            configuration.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = provisioning_profile_specifier
-          end
-
-          # Save the changes to the Xcode project file
-          project.save
-          EOF
-          xcodebuild -project SignIn/SignIn.xcodeproj -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project SignIn/SignIn.xcodeproj -setBuildSetting "PROVISIONING_PROFILE_SPECIFIER"="${{ inputs.provisioning_profile_specifier }}"
+          xcodebuild -project SignIn/SignIn.xcodeproj -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project SignIn/SignIn.xcodeproj -setBuildSetting "PROVISIONING_PROFILE_SPECIFIER"="${{ steps.input.outputs.provisioning_profile_specifier }}"
 
       - name: Build iOS App
         run: xcodebuild -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath "build/SignIn.xcarchive" build archive
 
       - name: Package iOS App
         run: xcodebuild -exportArchive -archivePath "build/SignIn.xcarchive" -exportOptionsPlist "SignIn/exportOptions.plist" -exportPath "build"
+    
