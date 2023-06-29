@@ -48,8 +48,8 @@ jobs:
 
       - name: Update provisioning profile specifier in Xcode project
         run: |
-          xcodebuild -project SignIn/SignIn.xcodeproj -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project SignIn/SignIn.xcodeproj -target "YourTargetName" -set "PROVISIONING_PROFILE_SPECIFIER=''"
-        
+          xcodebuild -project SignIn/SignIn.xcodeproj -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project SignIn/SignIn.xcodeproj -target "YourTargetName" -set "PROVISIONING_PROFILE_SPECIFIER="
+
 # xcodebuild -project SignIn/SignIn.xcodeproj -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project SignIn/SignIn.xcodeproj PROVISIONING_PROFILE_SPECIFIER=""
           
        # xcodebuild -project SignIn/SignIn.xcodeproj -showBuildSettings | grep ProvisioningStyle\ =\ Automatic || xcodebuild -project SignIn/SignIn.xcodeproj -setBuildSetting "PROVISIONING_PROFILE_SPECIFIER"="${{ steps.input.outputs.provisioning_profile_specifier }}"
