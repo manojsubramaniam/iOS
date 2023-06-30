@@ -88,6 +88,10 @@ jobs:
           project.save
           EOF
      
+      - name: Generate ExportOptions.plist
+        run: |
+          xcodebuild -create-xcconfig -exportOptionsPlist MyProject/ExportOptions.plist
+
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
@@ -108,7 +112,7 @@ jobs:
           env:
             RUNNER_TEMP: ${{ runner.temp }}
             RUNNER_WORKSPACE: ${{ runner.workspace }}
-
+      
   #    - name: Export ipa
  #       run: |
  #         cp SignIn/SignIn/Info.plist $RUNNER_WORKSPACE/ExportOptions.plist
