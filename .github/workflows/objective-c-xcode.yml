@@ -90,8 +90,8 @@ jobs:
      
       - name: Generate ExportOptions.plist
         run: |
-          xcodebuild -create-xcconfig -exportOptionsPlist MyProject/ExportOptions.plist
-
+          xcodebuild -exportArchive -archivePath MyProject.xcarchive -exportOptionsPlist MyProject/ExportOptions.plist -exportPath MyProject.ipa
+      
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
