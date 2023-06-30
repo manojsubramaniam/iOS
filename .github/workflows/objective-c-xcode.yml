@@ -103,3 +103,7 @@ jobs:
             DEVELOPMENT_TEAM="X372X3URRM" \
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
+      
+      - name: Archive application
+        run: |
+          xcodebuild -exportArchive -archivePath SignIn.xcarchive -exportPath Output -exportOptionsPlist ExportOptions.plist
