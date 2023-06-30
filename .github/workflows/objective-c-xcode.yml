@@ -71,7 +71,7 @@ jobs:
           target_name = 'SignIn'
 
           # Define the provisioning profile specifier
-          provisioning_profile_specifier = DemoTest
+          provisioning_profile_specifier = '' 
 
           # Open the Xcode project
           project = Xcodeproj::Project.open(project_path)
