@@ -57,21 +57,21 @@ jobs:
         run: |
           cd SignIn/
           ls
-        
-      - name: Modify Xcode project
+      
+      - name: Update provisioning profile specifier in Xcode project
         run: |
           gem install xcodeproj
           ruby - <<EOF
           require 'xcodeproj'
 
           # Define the path to your Xcode project
-          project_path = 'path/to/your.xcodeproj'
+          project_path = 'SignIn/SignIn.xcodeproj'
 
           # Define the target name
           target_name = 'SignIn'
 
           # Define the provisioning profile specifier
-          provisioning_profile_specifier = 'YourProvisioningProfileSpecifier'
+          provisioning_profile_specifier = DemoTest
 
           # Open the Xcode project
           project = Xcodeproj::Project.open(project_path)
@@ -87,6 +87,21 @@ jobs:
           # Save the changes to the Xcode project file
           project.save
           EOF
+      - name: Archive application
+        run: |
+          xcodebuild -workspace SignIn/SignIn.xcworkspace \
+          -scheme SignIn \
+          -archivePath $RUNNER_TEMP/SignIn.xcarchive \
+          -sdk iphonesimulator \
+          -configuration Debug \
+          -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' \
+          clean archive \
+          DEVELOPMENT_TEAM="YourTeamID" \
+          PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
+          -allowProvisioningUpdates
+
+
+      
 
       - name: Archive application
         run: |
