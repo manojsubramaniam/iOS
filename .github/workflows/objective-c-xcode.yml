@@ -101,9 +101,11 @@ jobs:
       
       - name: Export IPA
         run: |
-          xcodebuild -exportArchive -archivePath /Users/runner/work/_temp/SignIn.xcarchive \
-          -exportPath IPAOutput \
-          -exportOptionsPlist ExportOptions.plist
+          xcodebuild -exportArchive -archivePath $HOME/build/SignIn.xcarchive -exportPath $HOME/build/IPAOutput -exportOptionsPlist ExportOptions.plist
+      
+      - name: List contents of IPAOutput directory
+        run: |
+          ls -al IPAOutput
 
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
