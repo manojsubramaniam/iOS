@@ -90,17 +90,15 @@ jobs:
      
       - name: Archive application
         run: |
-          xcodebuild \
-          -workspace SignIn/SignIn.xcworkspace \
+          xcodebuild -workspace SignIn/SignIn.xcworkspace \
           -scheme SignIn \
-          -archivePath /Users/runner/work/_temp/SignIn.xcarchive \
+          -archivePath $RUNNER_TEMP/SignIn.xcarchive \
           -sdk iphonesimulator \
           -configuration Debug \
-          -destination "platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2" \
+          -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' \
           clean archive \
-          DEVELOPMENT_TEAM=YourTeamID \
-          PROVISIONING_PROFILE_SPECIFIER=YourProvisioningProfileSpecifier \
-          IPHONEOS_DEPLOYMENT_TARGET=11.0 \
+          DEVELOPMENT_TEAM="YourTeamID" \
+          PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
           -allowProvisioningUpdates
 
       - name: Export IPA
