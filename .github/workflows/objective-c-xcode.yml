@@ -118,15 +118,12 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
             -allowProvisioningUpdates
 
-          xcodebuild -exportArchive \
-            -archivePath $RUNNER_TEMP/SignIn.xcarchive \
-            -exportPath $HOME/build/IPAOutput \
-            -exportOptionsPlist ExportOptions.plist
-
-        env:
-          RUNNER_TEMP: ${{ runner.temp }}
-          RUNNER_WORKSPACE: ${{ runner.workspace }}
-
+          
+      - name: Archive application
+        run: |
+           xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportPath $HOME/build/IPAOutput \
+           -exportOptionsPlist ExportOptions.plist-allowProvisioningUpdatesxcodebuild -exportArchive \
+       
       - name: List contents of IPAOutput directory
         run: |
           ls -al IPAOutput
