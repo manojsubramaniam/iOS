@@ -100,13 +100,20 @@ jobs:
           DEVELOPMENT_TEAM="YourTeamID" \
           PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
           -allowProvisioningUpdates
-        shell: bash
-        
-      - name: Export ipa
-        run: |
-          cp SignIn/SignIn/Info.plist $RUNNER_WORKSPACE/ExportOptions.plist
-          xcodebuild -exportArchive -archivePath $HOME/build/SignIn.xcarchive/Products/Applications/SignIn.app -exportPath $HOME/build/IPAOutput -exportOptionsPlist $RUNNER_WORKSPACE/ExportOptions.plist
-        shell: bash
+
+          xcodebuild -exportArchive \
+          -archivePath $RUNNER_TEMP/SignIn.xcarchive \
+          -exportPath $HOME/build/IPAOutput \
+          -exportOptionsPlist $RUNNER_WORKSPACE/ExportOptions.plist
+          env:
+            RUNNER_TEMP: ${{ runner.temp }}
+            RUNNER_WORKSPACE: ${{ runner.workspace }}
+
+  #    - name: Export ipa
+ #       run: |
+ #         cp SignIn/SignIn/Info.plist $RUNNER_WORKSPACE/ExportOptions.plist
+ #         xcodebuild -exportArchive -archivePath $HOME/build/SignIn.xcarchive/Products/Applications/SignIn.app -exportPath $HOME/build/IPAOutput -exportOptionsPlist $RUNNER_WORKSPACE/ExportOptions.plist
+ #       shell: bash
 
       - name: List contents of IPAOutput directory
         run: |
