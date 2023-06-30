@@ -2,9 +2,11 @@ name: iOS starter workflow
 
 on:
   push:
-    branches: main
+    branches:
+      - main
   pull_request:
-    branches: main
+    branches:
+      - main
 
 jobs:
   build:
@@ -14,10 +16,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-       
+
       - name: check Xcode version
         run: /usr/bin/xcodebuild -version
-      
+
       - name: Install the Apple certificate and provisioning profile
         env:
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -33,31 +35,32 @@ jobs:
           # Apply the provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $RUNNER_TEMP/build_pp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
-      
+
       - name: check Xcode version
         run: /usr/bin/xcodebuild -version
+
       - name: Copy Podfile
         run: cp -r SignIn/Podfile .
-        
+
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
           pod repo list
           pod setup
-      
+
       - name: Install dependencies
         run: pod install --project-directory=SignIn/
-      
+
       - name: Check current directory
         run: |
           pwd
-          ls -al 
-     
+          ls -al
+
       - name: Navigate to SignIn folder
         run: |
           cd SignIn/
           ls
-      
+
       - name: Update provisioning profile specifier in Xcode project
         run: |
           gem install xcodeproj
@@ -71,7 +74,7 @@ jobs:
           target_name = 'SignIn'
 
           # Define the provisioning profile specifier
-          provisioning_profile_specifier = '' 
+          provisioning_profile_specifier = ''
 
           # Open the Xcode project
           project = Xcodeproj::Project.open(project_path)
@@ -87,11 +90,21 @@ jobs:
           # Save the changes to the Xcode project file
           project.save
           EOF
-     
+
       - name: Generate ExportOptions.plist
         run: |
-          xcodebuild -exportArchive -archivePath MyProject.xcarchive -exportOptionsPlist MyProject/ExportOptions.plist -exportPath MyProject.ipa
-      
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > ExportOptions.plist
+          echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> ExportOptions.plist
+          echo '<plist version="1.0">' >> ExportOptions.plist
+          echo '<dict>' >> ExportOptions.plist
+          echo '  <key>method</key>' >> ExportOptions.plist
+          echo '  <string>app-store</string>' >> ExportOptions.plist
+          echo '  <key>teamID</key>' >> ExportOptions.plist
+          echo '  <string>YourTeamID</string>' >> ExportOptions.plist
+          echo '  <!-- Add any other required keys and values -->' >> ExportOptions.plist
+          echo '</dict>' >> ExportOptions.plist
+          echo '</plist>' >> ExportOptions.plist
+
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
@@ -108,16 +121,10 @@ jobs:
           xcodebuild -exportArchive \
           -archivePath $RUNNER_TEMP/SignIn.xcarchive \
           -exportPath $HOME/build/IPAOutput \
-          -exportOptionsPlist $RUNNER_WORKSPACE/ExportOptions.plist
-          env:
-            RUNNER_TEMP: ${{ runner.temp }}
-            RUNNER_WORKSPACE: ${{ runner.workspace }}
-      
-  #    - name: Export ipa
- #       run: |
- #         cp SignIn/SignIn/Info.plist $RUNNER_WORKSPACE/ExportOptions.plist
- #         xcodebuild -exportArchive -archivePath $HOME/build/SignIn.xcarchive/Products/Applications/SignIn.app -exportPath $HOME/build/IPAOutput -exportOptionsPlist $RUNNER_WORKSPACE/ExportOptions.plist
- #       shell: bash
+          -exportOptionsPlist ExportOptions.plist
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+          RUNNER_WORKSPACE: ${{ runner.workspace }}
 
       - name: List contents of IPAOutput directory
         run: |
