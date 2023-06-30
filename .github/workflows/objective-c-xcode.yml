@@ -118,8 +118,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
             -allowProvisioningUpdates
 
-          
-      - name: Archive application
+      - name: Export application
         run: |
            xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportPath $HOME/build/IPAOutput \
            -exportOptionsPlist ExportOptions.plist-allowProvisioningUpdatesxcodebuild -exportArchive \
