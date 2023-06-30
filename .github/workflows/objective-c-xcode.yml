@@ -98,9 +98,12 @@ jobs:
            clean archive DEVELOPMENT_TEAM=YourTeamID \
            PROVISIONING_PROFILE_SPECIFIER=YourProvisioningProfileSpecifier \
            -allowProvisioningUpdates
+      
       - name: Export IPA
         run: |
-          xcodebuild -exportArchive -archivePath SignIn.xcarchive -exportPath IPAOutput -exportOptionsPlist ExportOptions.plist
+          xcodebuild -exportArchive -archivePath /Users/runner/work/_temp/SignIn.xcarchive \
+          -exportPath IPAOutput \
+          -exportOptionsPlist ExportOptions.plist
 
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
