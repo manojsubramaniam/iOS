@@ -93,7 +93,7 @@ jobs:
 
       - name: Archive application
         run: |
-          xcodebuild -workspace SignIn/SignIn.xcworkspace \
+           xcodebuild -workspace SignIn/SignIn.xcworkspace \
             -scheme SignIn \
             -archivePath $RUNNER_TEMP/SignIn.xcarchive \
             -sdk iphonesimulator \
@@ -101,8 +101,5 @@ jobs:
             -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' \
             clean archive \
             DEVELOPMENT_TEAM="YourTeamID" \
-            PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
             -allowProvisioningUpdates
-     
-     
-    
