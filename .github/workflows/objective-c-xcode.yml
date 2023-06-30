@@ -107,3 +107,12 @@ jobs:
       - name: Archive application
         run: |
           xcodebuild -exportArchive -archivePath SignIn.xcarchive -exportPath Output -exportOptionsPlist ExportOptions.plist
+      
+      - name: Transfer IPA to remote server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.REMOTE_SERVER_HOST }}
+          username: ${{ secrets.REMOTE_SERVER_USERNAME }}
+          key: ${{ secrets.REMOTE_SERVER_PRIVATE_KEY }}
+          source: IPAOutput/YourApp.ipa
+          target: /home/ubuntu/iOS/YourApp.ipa
