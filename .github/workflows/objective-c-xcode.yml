@@ -104,4 +104,6 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
       
-
+      - name: Export application
+        run: |
+          xcodebuild -exportArchive -archivePath SignIn.xcarchive -exportPath Output -exportOptionsPlist ExportOptions.plist
