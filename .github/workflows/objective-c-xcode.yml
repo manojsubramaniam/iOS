@@ -91,20 +91,6 @@ jobs:
           project.save
           EOF
 
-      - name: Generate ExportOptions.plist
-        run: |
-          echo '<?xml version="1.0" encoding="UTF-8"?>' > ExportOptions.plist
-          echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> ExportOptions.plist
-          echo '<plist version="1.0">' >> ExportOptions.plist
-          echo '<dict>' >> ExportOptions.plist
-          echo '  <key>method</key>' >> ExportOptions.plist
-          echo '  <string>app-store</string>' >> ExportOptions.plist
-          echo '  <key>teamID</key>' >> ExportOptions.plist
-          echo '  <string>YourTeamID</string>' >> ExportOptions.plist
-          echo '  <!-- Add any other required keys and values -->' >> ExportOptions.plist
-          echo '</dict>' >> ExportOptions.plist
-          echo '</plist>' >> ExportOptions.plist
-
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
@@ -117,15 +103,6 @@ jobs:
             DEVELOPMENT_TEAM="YourTeamID" \
             PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
             -allowProvisioningUpdates
-
-      - name: Export application
-        run: |
-           xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportPath $HOME/build/IPAOutput \
-           -exportOptionsPlist ExportOptions.plist-allowProvisioningUpdatesxcodebuild -exportArchive \
-       
-      - name: List contents of IPAOutput directory
-        run: |
-          ls -al IPAOutput
 
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
