@@ -104,10 +104,5 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" \
             -allowProvisioningUpdates
      
-      - name: Export IPA
-        run: |
-          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive \
-            -exportPath $RUNNER_TEMP/ExportedIPA \
-            -exportOptionsPlist ExportOptions.plist 
      
     
