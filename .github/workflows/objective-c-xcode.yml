@@ -87,17 +87,10 @@ jobs:
           # Save the changes to the Xcode project file
           project.save
           EOF
+     
       - name: Archive application
         run: |
-           xcodebuild -workspace SignIn/SignIn.xcworkspace \
-           -scheme SignIn \
-           -archivePath /Users/runner/work/_temp/SignIn.xcarchive \
-           -sdk iphonesimulator \
-           -configuration Debug \
-           -destination "platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2" \
-           clean archive DEVELOPMENT_TEAM=YourTeamID \
-           PROVISIONING_PROFILE_SPECIFIER=YourProvisioningProfileSpecifier \
-           -allowProvisioningUpdates
+           xcodebuild -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath /Users/runner/work/_temp/SignIn.xcarchive -sdk iphonesimulator -configuration Debug -destination "platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2" clean archive DEVELOPMENT_TEAM=YourTeamID PROVISIONING_PROFILE_SPECIFIER=YourProvisioningProfileSpecifier -allowProvisioningUpdates
       
       - name: Export IPA
         run: |
