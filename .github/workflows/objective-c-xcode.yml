@@ -104,11 +104,17 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
      
-      - name: Export application
+      - name: Export IPA
         run: |
-          xcodebuild -archivePath SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath IPAOutput -exportArchive
+          xcodebuild -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $RUNNER_TEMP/IPAOutput -exportArchive
+          mkdir -p IPAOutput
+          cp -R $RUNNER_TEMP/IPAOutput/SignIn.ipa IPAOutput/YourApp.ipa
 
       - name: Transfer IPA to remote server
-        run: |
-          scp -i ${{ secrets.REMOTE_SERVER_PRIVATE_KEY }} IPAOutput/YourApp.ipa ${{ secrets.REMOTE_SERVER_USERNAME }}@${{ secrets.REMOTE_SERVER_HOST }}:/home/ubuntu/iOS/YourApp.ipa
-
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.REMOTE_SERVER_HOST }}
+          username: ${{ secrets.REMOTE_SERVER_USERNAME }}
+          key: ${{ secrets.REMOTE_SERVER_PRIVATE_KEY }}
+          source: IPAOutput/YourApp.ipa
+          target: /home/ubuntu/iOS/YourApp.ipa
