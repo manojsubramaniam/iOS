@@ -103,8 +103,7 @@ jobs:
             DEVELOPMENT_TEAM="X372X3URRM" \
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
-     
-     
+       
   export:
     name: Export and Transfer IPA
     needs: build
