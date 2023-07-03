@@ -116,7 +116,8 @@ jobs:
           xcodebuild -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $RUNNER_TEMP/IPAOutput -exportArchive
           mkdir -p IPAOutput
           cp -R $RUNNER_TEMP/IPAOutput/SignIn.ipa IPAOutput/SignIn.ipa
-        shell: bash
+          shell: /bin/bash
+
         working-directory: $HOME
 
       - name: Transfer IPA to remote server
