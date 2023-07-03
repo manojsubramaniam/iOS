@@ -109,7 +109,6 @@ jobs:
         run: |
           cat ExportOptions.plist
 
-
       - name: Export IPA
         run: |
           EXPORT_OPTS_PATH=$RUNNER_TEMP/ExportOptions.plist
@@ -117,7 +116,7 @@ jobs:
           xcodebuild -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $RUNNER_TEMP/IPAOutput -exportArchive
           mkdir -p IPAOutput
           cp -R $RUNNER_TEMP/IPAOutput/SignIn.ipa IPAOutput/SignIn.ipa
-          shell: /bin/bash -e {0}
+        shell: bash
         working-directory: $HOME
 
       - name: Transfer IPA to remote server
