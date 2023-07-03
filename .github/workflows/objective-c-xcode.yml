@@ -114,13 +114,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Export IPA
-        env:
-          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
         run: |
-          echo "$EXPORT_OPTIONS_PLIST" | base64 --decode > $RUNNER_TEMP/ExportOptions.plist
+          echo "${{ secrets.EXPORT_OPTIONS_PLIST }}" > $RUNNER_TEMP/ExportOptions.plist
           xcodebuild -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist -exportPath $RUNNER_TEMP/IPAOutput -exportArchive
           mkdir -p IPAOutput
           cp -R $RUNNER_TEMP/IPAOutput/SignIn.ipa IPAOutput/SignIn.ipa
+
     
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
