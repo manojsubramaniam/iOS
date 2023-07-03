@@ -119,8 +119,10 @@ jobs:
           xcodebuild -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist -exportPath $RUNNER_TEMP/IPAOutput -exportArchive
           mkdir -p IPAOutput
           cp -R $RUNNER_TEMP/IPAOutput/SignIn.ipa IPAOutput/SignIn.ipa
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+          shell: /bin/bash -e
 
-    
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
         with:
