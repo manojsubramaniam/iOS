@@ -110,7 +110,6 @@ jobs:
 
       - name: Export application
         run: |
-          EXPORT_OPTS_PATH=$RUNNER_TEMP/ExportOptions.plist
           echo "$(cat ExportOptions.plist)" | base64 --decode > $EXPORT_OPTS_PATH
           xcodebuild -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $RUNNER_TEMP/IPAOutput -exportArchive
           mkdir -p IPAOutput
