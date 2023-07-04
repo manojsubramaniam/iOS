@@ -90,10 +90,10 @@ jobs:
           # Save the changes to the Xcode project file
           project.save
           EOF
-
+          
       - name: Archive application
         run: |
-           xcodebuild -workspace SignIn/SignIn.xcworkspace \
+          xcodebuild -workspace SignIn/SignIn.xcworkspace \
             -scheme SignIn \
             -archivePath $RUNNER_TEMP/SignIn.xcarchive \
             -sdk iphonesimulator \
@@ -103,7 +103,7 @@ jobs:
             DEVELOPMENT_TEAM="X372X3URRM" \
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
-            
+     
       - name: Print Export Options Plist
         run: cat ExportOptions.plist
 
