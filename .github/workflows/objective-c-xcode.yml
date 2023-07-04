@@ -91,6 +91,7 @@ jobs:
           project.save
           EOF
           
+          
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
@@ -104,7 +105,6 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
 
-   
   export:
     name: Export IPA and Transfer to Remote Server
     needs: build
@@ -125,6 +125,7 @@ jobs:
           EXPORT_OPTS_PATH="$RUNNER_TEMP/ExportOptions.plist"
           echo "$(cat ExportOptions.plist)" | base64 --decode > "$EXPORT_OPTS_PATH"
           echo "Export Options Plist decoded and saved to $EXPORT_OPTS_PATH"
+
 
       - name: Export IPA
         run: |
