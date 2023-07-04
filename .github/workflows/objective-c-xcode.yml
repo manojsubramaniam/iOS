@@ -90,8 +90,7 @@ jobs:
           # Save the changes to the Xcode project file
           project.save
           EOF
-    
-    
+          
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
