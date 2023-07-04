@@ -123,8 +123,8 @@ jobs:
 
       - name: Decode Export Options Plist
         run: |
-          EXPORT_OPTS_PATH="$RUNNER_TEMP/ExportOptions.plist"
-          echo "$(cat $RUNNER_TEMP/ExportOptions.plist)" | base64 --decode > "$EXPORT_OPTS_PATH"
+          EXPORT_OPTS_PATH="ExportOptions.plist"
+          echo "$(cat ExportOptions.plist)" | base64 --decode > "$EXPORT_OPTS_PATH"
           echo "Export Options Plist decoded and saved to $EXPORT_OPTS_PATH"
           
       - name: Export IPA
