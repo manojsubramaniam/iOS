@@ -91,6 +91,7 @@ jobs:
           project.save
           EOF
     
+    
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
@@ -103,8 +104,7 @@ jobs:
             DEVELOPMENT_TEAM="X372X3URRM" \
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
-   
-   
+
    
   export:
     name: Export IPA and Transfer to Remote Server
