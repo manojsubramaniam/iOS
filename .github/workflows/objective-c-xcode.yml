@@ -91,7 +91,6 @@ jobs:
           project.save
           EOF
           
-          
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
@@ -109,7 +108,6 @@ jobs:
     name: Export IPA and Transfer to Remote Server
     needs: build
     runs-on: macos-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -126,7 +124,6 @@ jobs:
           echo "$(cat ExportOptions.plist)" | base64 --decode > "$EXPORT_OPTS_PATH"
           echo "Export Options Plist decoded and saved to $EXPORT_OPTS_PATH"
 
-
       - name: Export IPA
         run: |
           xcodebuild -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist "$EXPORT_OPTS_PATH" -exportPath "$RUNNER_TEMP/IPAOutput" -exportArchive
@@ -142,4 +139,3 @@ jobs:
           key: ${{ secrets.REMOTE_SERVER_PRIVATE_KEY }}
           source: IPAOutput/SignIn.ipa
           target: /home/ubuntu/iOS/SignIn.ipa
-
