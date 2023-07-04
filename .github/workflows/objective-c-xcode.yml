@@ -91,6 +91,9 @@ jobs:
           project.save
           EOF
           
+      - name: Clear Derived Data
+        run: rm -rf ~/Library/Developer/Xcode/DerivedData
+      
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
