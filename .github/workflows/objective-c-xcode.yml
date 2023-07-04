@@ -90,6 +90,7 @@ jobs:
           # Save the changes to the Xcode project file
           project.save
           EOF
+    
       - name: Archive application
         run: |
           xcodebuild -workspace SignIn/SignIn.xcworkspace \
@@ -97,8 +98,12 @@ jobs:
             -archivePath $RUNNER_TEMP/SignIn.xcarchive \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,name=iPhone
-
+            -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' \
+            clean archive \
+            DEVELOPMENT_TEAM="X372X3URRM" \
+            PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
+            -allowProvisioningUpdates
+            
   export:
     name: Export IPA and Transfer to Remote Server
     needs: build
