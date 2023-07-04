@@ -87,7 +87,6 @@ jobs:
             configuration.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = provisioning_profile_specifier
           end
 
-
           # Save the changes to the Xcode project file
           project.save
           EOF
