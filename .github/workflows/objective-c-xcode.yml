@@ -156,12 +156,14 @@ jobs:
           </dict>
           </plist>
           EOF
-
-          xcodebuild -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/IPAOutput" -exportArchive
+          
+          xcodebuild archive -scheme SignIn -archivePath $RUNNER_TEMP/SignIn.xcarchive
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $RUNNER_TEMP/IPAOutput
           mkdir -p IPAOutput
-          cp -R "$RUNNER_TEMP/IPAOutput/SignIn.ipa" IPAOutput/SignIn.ipa
+          cp -R $RUNNER_TEMP/IPAOutput/SignIn.ipa IPAOutput/SignIn.ipa
           echo "IPA exported successfully"
-
+          shell: /bin/bash
+          
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
         with:
