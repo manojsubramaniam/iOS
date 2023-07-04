@@ -124,45 +124,54 @@ jobs:
           EXPORT_OPTS_PATH="ExportOptions.plist"
           echo "$(cat ExportOptions.plist)" | base64 --decode > "$EXPORT_OPTS_PATH"
           echo "Export Options Plist decoded and saved to $EXPORT_OPTS_PATH"
-          
-      - name: Export IPA
+      - name: Generate ExportOptions.plist
         run: |
           cat > ExportOptions.plist <<EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
-              <key>compileBitcode</key>
-              <false/>
-              <key>destination</key>
-              <string>export</string>
-              <key>method</key>
-              <string>development</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>com.newProject.SignIn</key>
-                  <string>DemoTest</string>
-              </dict>
-              <key>signingCertificate</key>
-              <string>Apple Development</string>
-              <key>signingStyle</key>
-              <string>manual</string>
-              <key>stripSwiftSymbols</key>
-              <true/>
-              <key>teamID</key>
-              <string>X372X3URRM</string>
-              <key>thinning</key>
-              <string>&lt;none&gt;</string>
+            <key>compileBitcode</key>
+            <false/>
+            <key>destination</key>
+            <string>export</string>
+            <key>method</key>
+            <string>development</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>com.newProject.SignIn</key>
+              <string>DemoTest</string>
+            </dict>
+            <key>signingCertificate</key>
+            <string>Apple Development</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>stripSwiftSymbols</key>
+            <true/>
+            <key>teamID</key>
+            <string>X372X3URRM</string>
+            <key>thinning</key>
+            <string>&lt;none&gt;</string>
           </dict>
           </plist>
           EOF
-          
-          xcodebuild archive -scheme SignIn -archivePath $RUNNER_TEMP/SignIn.xcarchive
-          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $RUNNER_TEMP/IPAOutput
-          mkdir -p IPAOutput
-          cp -R $RUNNER_TEMP/IPAOutput/SignIn.ipa IPAOutput/SignIn.ipa
-          echo "IPA exported successfully"
-          shell: /bin/bash
+    
+      - name: Build and Archive
+        run: /Applications/Xcode_14.2.app/Contents/Developer/usr/bin/xcodebuild archive -scheme SignIn -archivePath $RUNNER_TEMP/SignIn.xcarchive
+
+      - name: Export IPA
+        run: |
+          EXPORT_OPTS_PATH=ExportOptions.plist
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $RUNNER_TEMP/build
+
+      - name: Create IPA Output Directory
+        run: mkdir -p IPAOutput
+
+      - name: Copy IPA to Output Directory
+        run: cp -R "$RUNNER_TEMP/build/SignIn.ipa" IPAOutput/SignIn.ipa
+
+      - name: Display Success Message
+        run: echo "IPA exported successfully"  
           
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
