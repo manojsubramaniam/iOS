@@ -131,7 +131,7 @@ jobs:
           
       - name: Export IPA
         run: |
-          xcodebuild -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist "$EXPORT_OPTS_PATH" -exportPath "$RUNNER_TEMP/IPAOutput" -exportArchive
+          xcodebuild -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist "ExportOptions.plist" -exportPath "$RUNNER_TEMP/IPAOutput" -exportArchive
           mkdir -p IPAOutput
           cp -R "$RUNNER_TEMP/IPAOutput/SignIn.ipa" IPAOutput/SignIn.ipa
           echo "IPA exported successfully"
