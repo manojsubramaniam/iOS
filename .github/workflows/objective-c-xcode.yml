@@ -120,12 +120,18 @@ jobs:
       - name: Print Export Options Plist
         run: cat ExportOptions.plist
 
-      - name: Export application
+      - name: Decode Export Options Plist
         run: |
-          echo "$(cat ExportOptions.plist)" | base64 --decode > $EXPORT_OPTS_PATH
-          xcodebuild -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $RUNNER_TEMP/IPAOutput -exportArchive
+          EXPORT_OPTS_PATH="$RUNNER_TEMP/ExportOptions.plist"
+          echo "$(cat ExportOptions.plist)" | base64 --decode > "$EXPORT_OPTS_PATH"
+          echo "Export Options Plist decoded and saved to $EXPORT_OPTS_PATH"
+
+      - name: Export IPA
+        run: |
+          xcodebuild -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist "$EXPORT_OPTS_PATH" -exportPath "$RUNNER_TEMP/IPAOutput" -exportArchive
           mkdir -p IPAOutput
-          cp -R $RUNNER_TEMP/IPAOutput/SignIn.ipa IPAOutput/SignIn.ipa
+          cp -R "$RUNNER_TEMP/IPAOutput/SignIn.ipa" IPAOutput/SignIn.ipa
+          echo "IPA exported successfully"
 
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
