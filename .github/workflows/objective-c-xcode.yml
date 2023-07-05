@@ -146,7 +146,6 @@ jobs:
           </plist>
           EOF
 
-
       - name: Export IPA
         run: |
           xcodebuild -exportArchive -archivePath ${{ runner.workspace }}/_temp/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath ${{ runner.workspace }}/_temp/build
