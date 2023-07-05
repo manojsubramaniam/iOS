@@ -1,25 +1,25 @@
 name: iOS starter workflow
 on:
   push:
-    branches: 
+    branches:
       - main
   pull_request:
     branches:
-      - main 
-        
+      - main
+
 jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
- 
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
+
       - name: Clear CocoaPods cache
         run: pod cache clean --all
         working-directory: ./SignIn
-        
+
       - name: Remove problematic pod
         run: |
           pod deintegrate
@@ -29,35 +29,14 @@ jobs:
       - name: Reinstall CocoaPods
         run: pod install
         working-directory: ./SignIn
-        
-      - name: Install Cocoapods
-        run: |
-          gem install cocoapods -v '1.11.2'
-          pod install
-        working-directory: ./SignIn
 
       - name: Fix Podfile Platform Assignment
         run: sed -i '' 's/platform :ios/platform :ios, "16.2"/' ./SignIn/Podfile
 
-      - name: Fix Build Setting Overrides
-        run: |
-          sed -i '' 's/ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES//' ./SignIn/Pods/Target\ Support\ Files/Pods-SignIn-SignInUITests/Pods-SignIn-SignInUITests.debug.xcconfig
-          sed -i '' 's/ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES//' ./SignIn/Pods/Target\ Support\ Files/Pods-SignIn-SignInUITests/Pods-SignIn-SignInUITests.release.xcconfig
-      
       - name: Debug Workspace
         run: ls ./SignIn
-         
-         #xcodebuild archive -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -sdk iphonesimulator -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' clean archive DEVELOPMENT_TEAM="X372X3URRM" PROVISIONING_PROFILE_SPECIFIER="DemoTest" -allowProvisioningUpdates
-          
+
       - name: Build and Archive
         run: |
-         xcodebuild clean archive -workspace SignIn/SignIn.xcworkspace -scheme SignIn -sdk iphoneos -configuration Debug -archivePath $PWD/build/SignIn.xcarchive | xcpretty
-         working-directory: ./
-
-      - name: Export IPA
-        run: |
-          xcodebuild -exportArchive -archivePath $PWD/build/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build
-        working-directory: ./
-
-      - name: Move IPA to Artifact directory
-        run: mv ./build/*.ipa ./artifacts/
+          xcodebuild clean archive -workspace SignIn/SignIn.xcworkspace -scheme SignIn -sdk iphoneos -configuration Debug -archivePath $PWD/build/SignIn.xcarchive | xcpretty
+       
