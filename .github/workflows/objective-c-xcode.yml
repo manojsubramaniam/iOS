@@ -157,6 +157,9 @@ jobs:
     #  - name: Export IPA
     #    run: |
      #     xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist "ExportOptions.plist" -exportPath ${{ runner.workspace }}/_temp/build
+      - name: List Archive Directory
+        run: ls -al $RUNNER_TEMP
+      
       - name: Export IPA
         run: |
           xcodebuild -exportArchive \
