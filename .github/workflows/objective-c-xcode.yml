@@ -40,10 +40,10 @@ jobs:
         run: ls ./SignIn
 
       - name: Build and Archive
-        id: build-archive
-        run: xcodebuild clean archive -workspace SignIn/SignIn.xcworkspace -scheme SignIn -sdk iphoneos -configuration Debug -archivePath $PWD/build/SignIn.xcarchive | xcpretty
+        run: |
+          xcodebuild archive -workspace SignIn/SignIn.xcworkspace -scheme SignIn -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -sdk iphonesimulator -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' clean archive DEVELOPMENT_TEAM="X372X3URRM" PROVISIONING_PROFILE_SPECIFIER="DemoTest" -allowProvisioningUpdates
         working-directory: ./
-
+        
       - name: Export IPA
         if: ${{ success() && steps.build.outcome == 'success' }}
         run: xcodebuild -exportArchive -archivePath $PWD/build/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build
