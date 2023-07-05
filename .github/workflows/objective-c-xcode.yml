@@ -36,26 +36,47 @@ jobs:
           sed -i '' 's/ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES//' ./SignIn/Pods/Target\ Support\ Files/Pods-SignIn-SignInUITests/Pods-SignIn-SignInUITests.debug.xcconfig
           sed -i '' 's/ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES//' ./SignIn/Pods/Target\ Support\ Files/Pods-SignIn-SignInUITests/Pods-SignIn-SignInUITests.release.xcconfig
 
-      - name: Debug Workspace
-        run: ls ./SignIn
+      - name: Set up provisioning profile
+        run: echo "$PROVISIONING_PROFILE" > ./SignIn/ProvisioningProfile.mobileprovision
+        env:
+          PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
 
+      - name: Set up code signing settings
+        run: |
+          echo "$CODE_SIGN_IDENTITY" > ./SignIn/CodeSigningIdentity
+          echo "$PROVISIONING_PROFILE_SPECIFIER" > ./SignIn/ProvisioningProfileSpecifier
+        env:
+          CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_IDENTITY }}
+          PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}
+      
       - name: Build and Archive
+        id: build_archive
         run: |
           xcodebuild archive -workspace SignIn/SignIn.xcworkspace \
-          -scheme SignIn \
-          -archivePath "$RUNNER_TEMP/SignIn.xcarchive" \
-          -sdk iphonesimulator \
-          -configuration Debug \
+          -scheme SignIn -archivePath "$RUNNER_TEMP/SignIn.xcarchive" \
+          -sdk iphonesimulator -configuration Debug \
           -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' \
-          clean archive \
-          DEVELOPMENT_TEAM="X372X3URRM" \
-          PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
-          -allowProvisioningUpdates
-     
-      - name: Export IPA
-        run: xcodebuild -exportArchive -archivePath $PWD/build/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build
-        working-directory: ./
+          clean archive DEVELOPMENT_TEAM="X372X3URRM" \
+          PROVISIONING_PROFILE_SPECIFIER="DemoTest" -allowProvisioningUpdates \
+          | tee build_output.txt
 
-      - name: Move IPA to Artifact directory
-        if: ${{ success() && steps.build.outcome == 'success' }}
-        run: mv $PWD/build/SignIn.ipa $GITHUB_WORKSPACE/artifacts/SignIn.ipa
+      - name: Extract CODE_SIGN_IDENTITY
+        id: extract_code_sign_identity
+        run: |
+          CODE_SIGN_IDENTITY=$(grep -Eo 'CODE_SIGN_IDENTITY = .+' build_output.txt | awk -F '= ' '{print $2}')
+          echo "::set-output name=value::$CODE_SIGN_IDENTITY"
+
+      - name: Export IPA
+        if: ${{ success() && steps.build_archive.outcome == 'success' }}
+        run: |
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" \
+          -exportOptionsPlist ExportOptions.plist \
+          -exportPath "$RUNNER_TEMP/IPA" \
+          CODE_SIGN_IDENTITY="${{ steps.extract_code_sign_identity.outputs.value }}"
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v2
+        with:
+          name: SignIn-IPA
+          path: ${{ runner.temp }}/IPA
+
