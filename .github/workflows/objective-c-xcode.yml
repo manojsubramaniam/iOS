@@ -33,10 +33,10 @@ jobs:
       - name: Debug Workspace
         run: ls ./SignIn
         
-#      - name: Update Xcode Workspace
-  #      run: mv ./SignIn/SignIn.xcworkspace ./
-  #      working-directory: ./SignIn
-        
+      - name: Update Xcode Workspace
+        run: mv ./SignIn/SignIn.xcworkspace ./
+        working-directory: ./SignIn
+     
       - name: Build and Archive
         run: |
           xcodebuild clean archive -workspace SignIn.xcworkspace -scheme SignIn -sdk iphoneos -configuration Debug -archivePath $PWD/build/SignIn.xcarchive | xcpretty
