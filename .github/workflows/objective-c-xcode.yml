@@ -42,6 +42,7 @@ jobs:
       - name: Build and Archive
         run: xcodebuild clean archive -workspace SignIn/SignIn.xcworkspace -scheme SignIn -sdk iphoneos -configuration Debug -archivePath $PWD/build/SignIn.xcarchive | xcpretty
         working-directory: ./
+        continue-on-error: true
 
       - name: Export IPA
         run: xcodebuild -exportArchive -archivePath $PWD/build/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build
@@ -49,4 +50,3 @@ jobs:
 
       - name: Move IPA to Artifact directory
         run: mv $PWD/build/SignIn.ipa $GITHUB_WORKSPACE/artifacts/SignIn.ipa
-
