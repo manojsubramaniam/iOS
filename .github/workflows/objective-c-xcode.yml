@@ -30,9 +30,9 @@ jobs:
           sed -i '' 's/ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES//' ./SignIn/Pods/Target\ Support\ Files/Pods-SignIn-SignInUITests/Pods-SignIn-SignInUITests.debug.xcconfig
           sed -i '' 's/ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES//' ./SignIn/Pods/Target\ Support\ Files/Pods-SignIn-SignInUITests/Pods-SignIn-SignInUITests.release.xcconfig
       
-      - name: Update Xcode Workspace
-        run: mv ./SignIn/SignIn.xcworkspace ./
-        working-directory: ./SignIn
+#      - name: Update Xcode Workspace
+  #      run: mv ./SignIn/SignIn.xcworkspace ./
+  #      working-directory: ./SignIn
         
       - name: Build and Archive
         run: |
