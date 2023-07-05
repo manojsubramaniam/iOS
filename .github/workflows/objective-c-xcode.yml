@@ -149,10 +149,14 @@ jobs:
           </plist>
           EOF
 
+    #  - name: Export IPA
+    #    run: |
+     #     xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist "ExportOptions.plist" -exportPath ${{ runner.workspace }}/_temp/build
+      
       - name: Export IPA
         run: |
-          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist "ExportOptions.plist" -exportPath ${{ runner.workspace }}/_temp/build
-            
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist "ExportOptions.plist" -exportPath $RUNNER_TEMP/build      
+    
       - name: Create IPA Output Directory
         run: mkdir -p IPAOutput
 
