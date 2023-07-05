@@ -26,6 +26,7 @@ jobs:
           cp Certificates.p12 $RUNNER_TEMP/build_certificate.p12
           cp DemoTest.mobileprovision $RUNNER_TEMP/build_pp.mobileprovision
 
+
           # Import the certificate to the user keychain
           security import $RUNNER_TEMP/build_certificate.p12 -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k ~/Library/Keychains/login.keychain-db
           security list-keychain -d user -s ~/Library/Keychains/login.keychain-db
