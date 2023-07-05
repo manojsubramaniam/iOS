@@ -45,10 +45,10 @@ jobs:
         working-directory: ./
 
       - name: Export IPA
-        if: ${{ success() }}
+        if: ${{ success() && steps.build.outcome == 'success' }}
         run: xcodebuild -exportArchive -archivePath $PWD/build/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build
         working-directory: ./
 
       - name: Move IPA to Artifact directory
-        if: ${{ success() }}
+        if: ${{ success() && steps.build.outcome == 'success' }}
         run: mv $PWD/build/SignIn.ipa $GITHUB_WORKSPACE/artifacts/SignIn.ipa
