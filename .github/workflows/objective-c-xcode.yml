@@ -107,6 +107,9 @@ jobs:
             DEVELOPMENT_TEAM="X372X3URRM" \
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
+     
+      - name: Check Archive Path
+        run: echo "Archive Path:$RUNNER_TEMP/SignIn.xcarchive"
 
 
   export:
