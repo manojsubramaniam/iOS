@@ -16,102 +16,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: check Xcode version
-        run: /usr/bin/xcodebuild -version
-
-      - name: Install the Apple certificate and provisioning profile
-        env:
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+      - name: Install Cocoapods
         run: |
-          # Copy the certificate and provisioning profile to the correct locations
-          cp Certificates.p12 $RUNNER_TEMP/build_certificate.p12
-          cp DemoTest.mobileprovision $RUNNER_TEMP/build_pp.mobileprovision
+          gem install cocoapods -v '1.11.2'
+          pod install
+        working-directory: ./SignIn
 
+      - name: Fix Podfile Platform Assignment
+        run: sed -i '' 's/platform :ios/platform :ios, "16.2"/' ./SignIn/Podfile
 
-          # Import the certificate to the user keychain
-          security import $RUNNER_TEMP/build_certificate.p12 -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k ~/Library/Keychains/login.keychain-db
-          security list-keychain -d user -s ~/Library/Keychains/login.keychain-db
-
-          # Apply the provisioning profile
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $RUNNER_TEMP/build_pp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
-
-      - name: check Xcode version
-        run: /usr/bin/xcodebuild -version
-
-      - name: Copy Podfile
-        run: cp -r SignIn/Podfile .
-
-      - name: Install CocoaPods
+      - name: Fix Build Setting Overrides
         run: |
-          sudo gem install cocoapods
-          pod repo list
-          pod setup
+          sed -i '' 's/ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES//' ./SignIn/Pods/Target\ Support\ Files/Pods-SignIn-SignInUITests/Pods-SignIn-SignInUITests.debug.xcconfig
+          sed -i '' 's/ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES//' ./SignIn/Pods/Target\ Support\ Files/Pods-SignIn-SignInUITests/Pods-SignIn-SignInUITests.release.xcconfig
 
+      - name: Update Xcode Workspace
+        run: mv ./SignIn/SignIn.xcodeproj/SignIn.xcworkspace .
 
-      - name: Install dependencies
-        run: pod install --project-directory=SignIn/
-
-      - name: Check current directory
+      - name: Build and Archive
         run: |
-          pwd
-          ls -al
-
-
-      - name: Navigate to SignIn folder
-        run: |
-          cd SignIn/
-          ls
-
-      - name: Update provisioning profile specifier in Xcode project
-        run: |
-          gem install xcodeproj
-          ruby - <<EOF
-          require 'xcodeproj'
-
-          # Define the path to your Xcode project
-          project_path = 'SignIn/SignIn.xcodeproj'
-
-          # Define the target name
-          target_name = 'SignIn'
-
-          # Define the provisioning profile specifier
-          provisioning_profile_specifier = "DemoTest"
-
-          # Open the Xcode project
-          project = Xcodeproj::Project.open(project_path)
-
-          # Find the target
-          target = project.targets.find { |t| t.name == target_name }
-
-          # Update the provisioning profile settings
-          target.build_configuration_list.build_configurations.each do |configuration|
-            configuration.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = provisioning_profile_specifier
-          end
-
-          # Save the changes to the Xcode project file
-          project.save
-          EOF
-      - name: Clear Derived Data
-        run: rm -rf ~/Library/Developer/Xcode/DerivedData
-
-      - name: Archive application
-        run: |
-          xcodebuild archive -workspace SignIn/SignIn.xcworkspace \
-            -scheme SignIn \
-            -archivePath $RUNNER_TEMP/SignIn.xcarchive \
-            -sdk iphonesimulator \
-            -configuration Debug \
-            -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' \
-            clean archive \
-            DEVELOPMENT_TEAM="X372X3URRM" \
-            PROVISIONING_PROFILE_SPECIFIER="DemoTest"
-
-      - name: Export IPA
-        run: |
-          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath $RUNNER_TEMP/build
-
-      - name: Copy IPA
-        run: cp -R $RUNNER_TEMP/build/SignIn.ipa IPAOutput/SignIn.ipa
+          xcodebuild clean archive -workspace SignIn.xcworkspace -scheme SignIn -sdk iphoneos -configuration Debug -archivePath $PWD/build/SignIn.xcarchive | xcpretty
+        working-directory: ./
