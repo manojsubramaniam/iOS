@@ -150,7 +150,7 @@ jobs:
 
       - name: Export IPA
         run: |
-          xcodebuild -exportArchive -archivePath ${{ runner.workspace }}/_temp/SignIn.xcarchive -exportOptionsPlist "ExportOptions.plist" -exportPath ${{ runner.workspace }}/_temp/build
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist "ExportOptions.plist" -exportPath ${{ runner.workspace }}/_temp/build
             
       - name: Create IPA Output Directory
         run: mkdir -p IPAOutput
