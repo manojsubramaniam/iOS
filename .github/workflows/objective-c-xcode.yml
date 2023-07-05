@@ -15,7 +15,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        
+      - name: Clear CocoaPods cache
+        run: pod cache clean --all
+        working-directory: ./SignIn
+        
+      - name: Remove problematic pod
+        run: |
+          pod deintegrate
+          rm Podfile.lock
+        working-directory: ./SignIn
 
+      - name: Reinstall CocoaPods
+        run: pod install
+        working-directory: ./SignIn
+        
       - name: Install Cocoapods
         run: |
           gem install cocoapods -v '1.11.2'
