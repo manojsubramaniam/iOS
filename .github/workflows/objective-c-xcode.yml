@@ -53,7 +53,6 @@ jobs:
           -allowProvisioningUpdates
      
       - name: Export IPA
-        if: ${{ success() && steps.build.outcome == 'success' }}
         run: xcodebuild -exportArchive -archivePath $PWD/build/SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build
         working-directory: ./
 
