@@ -109,6 +109,9 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
             -allowProvisioningUpdates
      
+      - name: List Archive Contents
+        run: ls -al $RUNNER_TEMP
+        
       - name: Check Archive Path
         run: echo "Archive Path:$RUNNER_TEMP/SignIn.xcarchive"
 
