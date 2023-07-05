@@ -92,13 +92,12 @@ jobs:
           # Save the changes to the Xcode project file
           project.save
           EOF
-          
       - name: Clear Derived Data
         run: rm -rf ~/Library/Developer/Xcode/DerivedData
-      
+
       - name: Archive application
         run: |
-          xcodebuild -workspace SignIn/SignIn.xcworkspace \
+          xcodebuild archive -workspace SignIn/SignIn.xcworkspace \
             -scheme SignIn \
             -archivePath $RUNNER_TEMP/SignIn.xcarchive \
             -sdk iphonesimulator \
@@ -106,49 +105,13 @@ jobs:
             -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=16.2' \
             clean archive \
             DEVELOPMENT_TEAM="X372X3URRM" \
-            PROVISIONING_PROFILE_SPECIFIER="DemoTest" \
-            -allowProvisioningUpdates
+            PROVISIONING_PROFILE_SPECIFIER="DemoTest"
 
-      - name: Generate ExportOptions.plist
-        run: |
-          cat > ExportOptions.plist <<EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>compileBitcode</key>
-            <false/>
-            <key>destination</key>
-            <string>export</string>
-            <key>method</key>
-            <string>development</string>
-            <key>provisioningProfiles</key>
-            <dict>
-              <key>com.newProject.SignIn</key>
-              <string>DemoTest</string>
-            </dict>
-            <key>signingCertificate</key>
-            <string>Apple Development</string>
-            <key>signingStyle</key>
-            <string>manual</string>
-            <key>stripSwiftSymbols</key>
-            <true/>
-            <key>teamID</key>
-            <string>X372X3URRM</string>
-            <key>thinning</key>
-            <string>&lt;none&gt;</string>
-          </dict>
-          </plist>
-          EOF
-      
       - name: Export IPA
         run: |
-             xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist "ExportOptions.plist" -exportPath $RUNNER_TEMP/build
-             mkdir -p IPAOutput   
-             cp -R ${{ runner.workspace }}/_temp/build/SignIn.ipa IPAOutput/SignIn.ipa
-             echo "IPA exported successfully"
-        env:
-          RUNNER_TEMP: ${{ runner.temp }}
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath $RUNNER_TEMP/build
 
-            
-     
+      - name: Copy IPA
+        run: cp -R $RUNNER_TEMP/build/SignIn.ipa IPAOutput/SignIn.ipa
