@@ -124,7 +124,6 @@ jobs:
           EXPORT_OPTS_PATH="ExportOptions.plist"
           echo "$(cat ExportOptions.plist)" | base64 --decode > "$EXPORT_OPTS_PATH"
           echo "Export Options Plist decoded and saved to $EXPORT_OPTS_PATH"
-
       - name: Generate ExportOptions.plist
         run: |
           cat > ExportOptions.plist <<EOF
@@ -156,24 +155,24 @@ jobs:
           </dict>
           </plist>
           EOF
-    
+
       - name: Build and Archive
-        run: /Applications/Xcode_14.2.app/Contents/Developer/usr/bin/xcodebuild archive -scheme SignIn -archivePath ${{ runner.temp }}/SignIn.xcarchive
+        run: /Applications/Xcode_14.2.app/Contents/Developer/usr/bin/xcodebuild archive -scheme SignIn -archivePath ${{ runner.workspace }}/_temp/SignIn.xcarchive
 
       - name: Export IPA
         run: |
           EXPORT_OPTS_PATH=ExportOptions.plist
-          xcodebuild -exportArchive -archivePath ${{ runner.temp }}/SignIn.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath ${{ runner.temp }}/build
+          xcodebuild -exportArchive -archivePath ${{ runner.workspace }}/_temp/SignIn.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath ${{ runner.workspace }}/_temp/build
 
       - name: Create IPA Output Directory
         run: mkdir -p IPAOutput
 
       - name: Copy IPA to Output Directory
-        run: cp -R ${{ runner.temp }}/build/SignIn.ipa IPAOutput/SignIn.ipa
+        run: cp -R ${{ runner.workspace }}/_temp/build/SignIn.ipa IPAOutput/SignIn.ipa
 
       - name: Display Success Message
         run: echo "IPA exported successfully"
-          
+                
       - name: Transfer IPA to remote server
         uses: appleboy/scp-action@master
         with:
