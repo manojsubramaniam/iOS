@@ -102,7 +102,9 @@ jobs:
           | tee build_output.txt
       
       - name: Check for Archive file
-        run: ls "$RUNNER_TEMP/SignIn.xcarchive"
+        run: |
+         ls "$RUNNER_TEMP/SignIn.xcarchive"
+         ls "$RUNNER_TEMP/SignIn.xcarchive/Products"
           
       - name: Retrieve CODE_SIGN_IDENTITY
         id: get_code_sign_identity
