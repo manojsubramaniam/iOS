@@ -112,7 +112,7 @@ jobs:
 
       - name: Build and Export
         run: |
-          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/IPA" CODE_SIGN_IDENTITY=""        
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive/Products" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/IPA" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO      
     
       - name: Upload IPA
         uses: actions/upload-artifact@v2
