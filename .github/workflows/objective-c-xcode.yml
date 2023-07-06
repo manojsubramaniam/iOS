@@ -112,13 +112,11 @@ jobs:
 
       - name: Build and Export
         run: |
-          # Access the CODE_SIGN_IDENTITY value from the previous step's output
-          CODE_SIGN_IDENTITY=${{ steps.get_code_sign_identity.outputs.code_sign_identity }}
-          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist "ExportOptions.plist" -exportPath "$RUNNER_TEMP/build" CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY"
-   
-
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/IPA" CODE_SIGN_IDENTITY=""        
+    
       - name: Upload IPA
         uses: actions/upload-artifact@v2
         with:
           name: SignIn-IPA
           path: ${{ runner.temp }}/IPA
+
