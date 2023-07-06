@@ -103,11 +103,11 @@ jobs:
       
       - name: Check for Archive file
         run: |
-         ls "$RUNNER_TEMP/SignIn.xcarchive"
+         ls -a "$RUNNER_TEMP/SignIn.xcarchive"
          
       - name: Check for Archive file
         run: |
-          ls "$RUNNER_TEMP/SignIn.xcarchive/Products/"
+          ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/"
           
       - name: Retrieve CODE_SIGN_IDENTITY
         id: get_code_sign_identity
