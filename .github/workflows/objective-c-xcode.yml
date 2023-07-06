@@ -107,7 +107,7 @@ jobs:
          
       - name: Check for Archive file
         run: |
-          ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/"
+          ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
           
       - name: Retrieve CODE_SIGN_IDENTITY
         id: get_code_sign_identity
