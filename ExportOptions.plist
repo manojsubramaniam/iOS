@@ -7,7 +7,7 @@
 	<key>destination</key>
 	<string>export</string>
 	<key>method</key>
-	<string>development</string>
+	<string>ad-hoc</string> <!-- Update the method value accordingly -->
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.newProject.SignIn</key>
