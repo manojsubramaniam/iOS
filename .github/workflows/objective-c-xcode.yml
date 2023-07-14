@@ -1,13 +1,13 @@
-name: iOS starter workflow 
-on:  
-  push:   
-    branches: 
-      - main 
-  pull_request:   
-    branches: 
-      - main     
-        
-jobs: 
+name: iOS starter workflow
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
- 
+
       - name: check Xcode version
         run: /usr/bin/xcodebuild -version
 
@@ -100,15 +100,15 @@ jobs:
           clean archive DEVELOPMENT_TEAM="X372X3URRM" \
           PROVISIONING_PROFILE_SPECIFIER="DemoTest" -allowProvisioningUpdates \
           | tee build_output.txt
-      
+
       - name: Check for Archive file
         run: |
-         ls -a "$RUNNER_TEMP/SignIn.xcarchive"
-         
+          ls -a "$RUNNER_TEMP/SignIn.xcarchive"
+
       - name: Check for Archive file
         run: |
           ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
-          
+
       - name: Retrieve CODE_SIGN_IDENTITY
         id: get_code_sign_identity
         run: |
@@ -116,11 +116,20 @@ jobs:
           echo "::set-output name=code_sign_identity::$CODE_SIGN_IDENTITY"
 
       - name: Build and Export
-        run: |     
+        id: build_export
+        run: |
           xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/IPA" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+
       - name: Upload IPA
+        if: steps.build_export.outcome == 'success'
         uses: actions/upload-artifact@v2
         with:
           name: SignIn-IPA
           path: ${{ runner.temp }}/IPA
+
+      - name: Send failure notification
+        if: steps.build_export.outcome == 'failure'
+        run: |
+          echo "Build and export failed. Please check the workflow logs for more information."
+          # Add the code to send a notification or take any necessary action
 
