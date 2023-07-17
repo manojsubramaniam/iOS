@@ -117,19 +117,13 @@ jobs:
      
       - name: Build and Export
         id: build_export
-        run: | 
-              xcodebuild -exportArchive \
-                -archivePath "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" \
-                -exportPath "$RUNNER_TEMP/IPA" \
-                -exportOptionsPlist <(echo '<?xml version="1.0" encoding="UTF-8"?> \
-                  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"> \
-                  <plist version="1.0"> \
-                  <dict> \
-                    <key>method</key> \
-                    <string>development</string> <!-- Update the method value accordingly --> \
-                  </dict> \
-                  </plist>') \
-                CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" \
+            -exportPath "$RUNNER_TEMP/IPA" \
+            -exportOptionsPlist ExportOptions.plist \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+
 
       - name: Upload IPA
         if: steps.build_export.outcome == 'success'
