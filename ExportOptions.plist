@@ -6,8 +6,6 @@
     <false/>
     <key>destination</key>
     <string>export</string>
-    <key>method</key>
-    <string>app-store</string> <!-- Update the method value accordingly (e.g., app-store, ad-hoc, enterprise, development) -->
     <key>provisioningProfiles</key>
     <dict>
         <key>com.newProject.SignIn</key>
