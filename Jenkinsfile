@@ -4,6 +4,20 @@ pipeline {
   }
   
   stages {
+    stage('Setup') {
+            steps {
+                sh 'xcode-select --install' // Install Xcode command-line tools
+                sh 'brew install git ruby' // Install Git and Ruby using Homebrew
+                sh 'sudo gem install cocoapods' // Install CocoaPods
+                // Install additional dependencies as required
+                
+                // Set up iOS simulators
+                sh 'xcodebuild -showsdks' // List available simulators
+                // Install simulators using xcodebuild -sdk <sdk_identifier> install
+                
+                // Set up any other necessary configurations
+            }
+        }
     stage('Checkout') {
       steps {
         checkout scm
