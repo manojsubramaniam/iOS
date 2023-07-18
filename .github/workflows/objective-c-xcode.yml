@@ -105,7 +105,17 @@ jobs:
         run: |
           ls -a "$RUNNER_TEMP/SignIn.xcarchive"
 
-      - name: Check for Archive file
-        run: |
-          ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
-          scp "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
+   #   - name: Check for Archive file
+  #      run: |
+   #       ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
+   #       scp "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
+
+      - name: Transfer APK to remote server
+        uses: appleboy/scp-action@master
+        with:
+          host: 100.26.141.100
+          username: ubuntu
+          key: ${{ secrets.REMOTE_SERVER_PRIVATE_KEY }}
+          source: $RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app
+          target: /home/ubuntu/
+
