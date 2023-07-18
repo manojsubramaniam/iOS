@@ -2,7 +2,7 @@ pipeline {
   agent {
     label 'macos-latest'
   }
-  
+   
   stages {
     stage('Setup') {
             steps {
