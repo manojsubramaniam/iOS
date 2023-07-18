@@ -108,33 +108,4 @@ jobs:
       - name: Check for Archive file
         run: |
           ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
-
-      - name: Retrieve CODE_SIGN_IDENTITY
-        id: get_code_sign_identity
-        run: |
-          CODE_SIGN_IDENTITY=$(security find-identity -v -p codesigning | grep "iPhone Distribution:" | awk '{print $2}')
-          echo "::set-output name=code_sign_identity::$CODE_SIGN_IDENTITY"
-     
-      - name: Build and Export
-        id: build_export
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" \
-            -exportPath "$RUNNER_TEMP/IPA" \
-            -exportOptionsPlist ExportOptions.plist \
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-
-
-      - name: Upload IPA
-        if: steps.build_export.outcome == 'success'
-        uses: actions/upload-artifact@v2
-        with:
-          name: SignIn-IPA
-          path: ${{ runner.temp }}/IPA
-
-      - name: Send failure notification
-        if: steps.build_export.outcome == 'failure'
-        run: |
-          echo "Build and export failed. Please check the workflow logs for more information."
-          # Add the code to send a notification or take any necessary action
-
+          scp "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
