@@ -72,24 +72,5 @@ pipeline {
         '''
       }
     }
-    
-    stage('Upload IPA') {
-      when {
-        succeeded()
-      }
-      steps {
-        archiveArtifacts artifacts: "$RUNNER_TEMP/IPA", fingerprint: true
-      }
-    }
-    
-    stage('Send failure notification') {
-      when {
-        failed()
-      }
-      steps {
-        echo 'Build and export failed. Please check the workflow logs for more information.'
-        // Add code to send a notification or take any necessary action
-      }
-    }
   }
 }
