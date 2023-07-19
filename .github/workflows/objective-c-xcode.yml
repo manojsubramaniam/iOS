@@ -106,14 +106,17 @@ jobs:
         run: |
           ls -a "$RUNNER_TEMP/SignIn.xcarchive"
 
-   #   - name: Check for Archive file
-  #      run: |
+   #  - name: Check for Archive file
+  #     run: |
    #       ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
    #       scp "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
       
-  #    - name: Transfer SignIn.app to remote server
-  #      run: scp -i secrets.REMOTE_SERVER_PRIVATE_KEY $RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app ubuntu@100.26.141.100:/home/ubuntu/
+  #   - name: Transfer SignIn.app to remote server
+  #     run: scp -i secrets.REMOTE_SERVER_PRIVATE_KEY $RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app ubuntu@100.26.141.100:/home/ubuntu/
+     
       - name: Transfer SignIn.app to remote server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          scp -i ${{ secrets.SSH_PRIVATE_KEY }} "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
+          scp -i "$SSH_PRIVATE_KEY" "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
 
