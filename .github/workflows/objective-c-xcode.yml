@@ -106,6 +106,10 @@ jobs:
         run: |
           ls -a "$RUNNER_TEMP/SignIn.xcarchive"
           ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
+   
+      - name: Build and Export
+        run: |
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/IPA" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 
       - name: Transfer SignIn.app to remote server
         run: |
