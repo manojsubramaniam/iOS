@@ -105,25 +105,9 @@ jobs:
       - name: Check for Archive file
         run: |
           ls -a "$RUNNER_TEMP/SignIn.xcarchive"
+          ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
 
-   #  - name: Check for Archive file
-  #     run: |
-   #       ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
-   #       scp "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
-      
-  #   - name: Transfer SignIn.app to remote server
-  #     run: scp -i secrets.REMOTE_SERVER_PRIVATE_KEY $RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app ubuntu@100.26.141.100:/home/ubuntu/
-     
       - name: Transfer SignIn.app to remote server
         run: |
-          # Create a temporary SSH private key file
-          echo "$SSH_PRIVATE_KEY" > ssh_key.pem
-          chmod 600 ssh_key.pem
-
           # Copy SignIn.app to the remote server using scp
-          scp -i ssh_key.pem "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
-
-          # Remove the temporary SSH private key file
-          rm ssh_key.pem
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          scp -i SSH_PRIVATE_KEY "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
