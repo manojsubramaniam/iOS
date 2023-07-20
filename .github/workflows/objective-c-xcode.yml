@@ -117,9 +117,9 @@ jobs:
      
       - name: Build and Export
         run: |
-          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/IPA" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-
-    #  - name: Transfer SignIn.app to remote server
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/SignIn.xcarchive -exportOptionsPlist ~/ExportOptions.plist -exportPath $RUNNER_TEMP/build
+    #    xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/IPA" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO 
+#- name: Transfer SignIn.app to remote server
   #      run: |
  #         # Copy SignIn.app to the remote server using scp
   #        scp -i ${{ secrets.SSH_PRIVATE_KEY }} "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
