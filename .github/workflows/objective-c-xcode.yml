@@ -110,4 +110,4 @@ jobs:
       - name: Transfer SignIn.app to remote server
         run: |
           # Copy SignIn.app to the remote server using scp
-          scp -i SSH_PRIVATE_KEY "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
+          scp -i ${{ secrets.SSH_PRIVATE_KEY }} "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/SignIn.app" ubuntu@100.26.141.100:/home/ubuntu/
