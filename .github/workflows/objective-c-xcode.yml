@@ -5,7 +5,7 @@ on:
       - main              
   pull_request: 
     branches: 
-      - main 
+      - main  
 env:
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }} 
 jobs:
