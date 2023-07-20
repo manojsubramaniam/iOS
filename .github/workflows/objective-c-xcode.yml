@@ -108,7 +108,7 @@ jobs:
           ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
       
       - name: Transfer APK to remote server
-        uses: appleboy/scp-action@v1
+        uses: ssh-actions/scp@v3
         with:
           host: 100.26.141.100
           username: ubuntu
