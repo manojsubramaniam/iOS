@@ -108,6 +108,11 @@ jobs:
           ls -a "$RUNNER_TEMP/SignIn.xcarchive"
           ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
 
-      - name: Build and Export
+      - name: Export IPA
         run: |
-          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath build
+          xcodebuild -archivePath "$RUNNER_TEMP/SignIn.xcarchive" \
+                     -exportOptionsPlist ExportOptions.plist \
+                     -exportPath "$RUNNER_TEMP/build" \
+                     -allowProvisioningUpdates \
+                     -exportArchive \
+                     | tee build_output.txt
