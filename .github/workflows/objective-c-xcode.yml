@@ -102,11 +102,12 @@ jobs:
           PROVISIONING_PROFILE_SPECIFIER="DemoTest" -allowProvisioningUpdates \
           | tee build_output.txt
 
-      - name: Check for Archive file
+      - name: List files in $RUNNER_TEMP
         run: |
+          ls -a "$RUNNER_TEMP"
           ls -a "$RUNNER_TEMP/SignIn.xcarchive"
           ls -a "$RUNNER_TEMP/SignIn.xcarchive/Products/Applications/"
-    
+
       - name: Build and Export
         run: |
-           xcodebuild -exportArchive -archivePath SignIn.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SignIn.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath build
